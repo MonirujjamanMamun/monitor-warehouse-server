@@ -21,12 +21,20 @@ async function run(){
         await client.connect();
         const productCollection= client.db("monitor-warehouse").collection("products");
 
-  
         app.get('/products', async(req, res)=>{
             const query={};
             const cursor = productCollection.find(query);
-            const result = await cursor.toArray(cursor)
-            res.send(result);
+            const products = await cursor.toArray(cursor)
+            res.send(products);
+        })
+        app.get('/sixproducts', async(req, res)=>{
+            const query={}
+            const cursor = productCollection.find(query);
+            const products = await cursor.limit(6).toArray();
+            res.send(products)
+        })
+        app.get('/inventoris/:id', async(req, res)=>{
+            
         })
     }
     finally{

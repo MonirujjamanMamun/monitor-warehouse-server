@@ -39,12 +39,21 @@ async function run() {
             const products = await productCollection.findOne(query);
             res.send(products);
         })
-        app.delete('/inventoris/:id', async(req, res)=>{
+
+        app.put('/inventoris/:id', async (req, res) => {
             const id = req.params.id;
-            const query= {_id:ObjectId(id)};
-            const products= await productCollection.deleteOne(query);
+            // console.log(req.params)
+            const updateQuantity = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateProduct = {
+                $set: {
+                   ...updateQuantity
+                }
+            }
+            const products = await productCollection.updateOne(filter, updateProduct, options)
             res.send(products)
-        })
+        }) 
     }
     finally {
         // await client.close();

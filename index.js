@@ -21,7 +21,7 @@ async function run() {
         await client.connect();
         const productCollection = client.db("monitor-warehouse").collection("products");
 
-        // all product 
+        // All product 
         app.get('/products', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
@@ -74,6 +74,19 @@ async function run() {
             res.send(product);
         })
         // delete single product 
+        app.delete('/manageInventories/:id', async(req, res)=>{
+            const id= req.params.id;
+            const query = {_id: ObjectId(id)}
+            const product = await productCollection.deleteOne(query)
+            res.send(product);
+        })
+
+        // Add item api 
+        app.post('/additem', async(req, res)=>{
+            const addItem = req.body;
+            const product= await productCollection.insertOne(addItem)
+            res.send(product);
+        })
     }
     finally {
         // await client.close();

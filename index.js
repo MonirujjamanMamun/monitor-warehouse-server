@@ -40,6 +40,7 @@ async function run() {
             res.send(products);
         })
 
+        // Increase product count
         app.put('/inventoris/:id', async (req, res) => {
             const id = req.params.id;
             // console.log(req.params)
@@ -54,6 +55,21 @@ async function run() {
             const products = await productCollection.updateOne(filter, updateProduct, options)
             res.send(products)
         }) 
+
+        // Increase product count
+        app.put('/inventoris/:id', async(req, res)=>{
+            const id = req.params.id;
+            const updateQuantity = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options ={upsert: true};
+            const updateProduct={
+                $set:{
+                    ...updateQuantity
+                }
+            }
+            const product = await productCollection.updateOne(filter, updateProduct, options)
+            res.send(product);
+        })
     }
     finally {
         // await client.close();

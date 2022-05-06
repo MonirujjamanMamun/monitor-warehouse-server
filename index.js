@@ -21,18 +21,21 @@ async function run() {
         await client.connect();
         const productCollection = client.db("monitor-warehouse").collection("products");
 
+        // all product 
         app.get('/products', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
             const products = await cursor.toArray(cursor)
             res.send(products);
         })
+        // Home page six product
         app.get('/sixproducts', async (req, res) => {
             const query = {}
             const cursor = productCollection.find(query);
             const products = await cursor.limit(6).toArray();
             res.send(products)
         })
+        // inventoryis page single product
         app.get('/inventoris/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -56,7 +59,7 @@ async function run() {
             res.send(products)
         }) 
 
-        // Increase product count
+        // Deincrease product count
         app.put('/inventoris/:id', async(req, res)=>{
             const id = req.params.id;
             const updateQuantity = req.body;
@@ -70,6 +73,7 @@ async function run() {
             const product = await productCollection.updateOne(filter, updateProduct, options)
             res.send(product);
         })
+        // delete single product 
     }
     finally {
         // await client.close();
